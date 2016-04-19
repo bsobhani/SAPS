@@ -1,8 +1,8 @@
-CFLAGS =        -g -Wall -pedantic -Wstrict-prototypes
+CFLAGS =        -g -Wall -ansi -pedantic -Wstrict-prototypes
 #CFLAGS =       -O2 -Wall -ansi -pedantic -Wstrict-prototypes    
 
-sound: lpf.c fft.c
-	gcc lpf.c fft.c -o lpf -lm
+lpf: lpf.c fft.c file_io.c
+	gcc $(CFLAGS) lpf.c fft.c file_io.c -o lpf -lm
 
 clean:
 	rm -f lpf

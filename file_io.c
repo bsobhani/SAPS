@@ -3,20 +3,11 @@
 #define buffer_size 1024*200
 
 void read_data(struct Header *h, double** data_buffer){
-  
-  unsigned char buffer[buffer_size];
   char head[buffer_size];
-  //double buffer_fl[buffer_size];
-  double* buffer_fl;
-  char* ns;
-  int i, df,sqf;
-  int data_start_i;
+  int i;
   int data_size;
   unsigned char uc;
   
-  df=0;
-  sqf=0;
-  //scanf("%c",buffer);
   data_size=-1;
   for(i=0; data_size==-1; ++i){
     scanf("%c",head+i);
@@ -43,7 +34,6 @@ void read_data(struct Header *h, double** data_buffer){
 void write_data(struct Header *h, double* data_buffer){
   int i;
   for(i=0; i<h->head_size; ++i){
-    //fwrite(h->string+i,1,1,stdout);
     printf("%c",h->string[i]);
   }
   for(i=0; i<h->data_size; ++i){

@@ -52,8 +52,8 @@ void fft(complex double* x, complex double* X, int N){
   for(j0=0; j0<r1; ++j0){
     for(k0=0; k0<r2; ++k0){
       for(k1=0; k1<r1; ++k1){
-	A1[j0][k0]+=x[k1*r2+k0]*cpow(W,j0*k1*r2);
-	/*A1[j0][k0]+=x[k1*r2+k0]*cp1[j0][k1];*/
+	/*A1[j0][k0]+=x[k1*r2+k0]*cpow(W,j0*k1*r2);*/
+	A1[j0][k0]+=x[k1*r2+k0]*cp1[j0][k1];
       }
     }  
   }
