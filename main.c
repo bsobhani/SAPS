@@ -79,7 +79,11 @@ void lpf(double* buffer, int size, int cutoff){
  
   fft(x_buffer, X_buffer, size);
   
-  for(i=(size/2)-cutoff; i<(size/2)+cutoff; ++i){
+  /*for(i=(size/2)-cutoff; i<(size/2)+cutoff; ++i){
+    X_buffer[i]=0.0;
+  }
+  */
+  for(i=cutoff; i<size-cutoff; ++i){
     X_buffer[i]=0.0;
   }
   /*for(i=0; i<size; ++i){
@@ -89,7 +93,7 @@ void lpf(double* buffer, int size, int cutoff){
   //idft(x_buffer, X_buffer, size);
   ifft(X_buffer, x_buffer, size);
   for(i=0; i<size; ++i){
-    fprintf(stderr,"%f %f %f\n",buffer[i],creal(x_buffer[i]),cimag(x_buffer[i]));
+    /* fprintf(stderr,"%f %f %f\n",buffer[i],creal(x_buffer[i]),cimag(x_buffer[i])); */
     buffer[i]=creal(x_buffer[i]);
   }
 }
@@ -152,13 +156,16 @@ void write_data(struct Header *h, double* data_buffer){
   return;
 }
 
-int main(){
+int main(int argc, char** argv){
   struct Header h;
   double* data_buffer;
   //double cf=11025.0-k*11025.0/h.data_size;
-  double cf=1000.0;
-  int cutoff=(int) ((11025-cf)*h.data_size/11025.0);
+  double cf=800.0;
+  //int cutoff=(int) ((11025-cf)*h.data_size/11025.0);
+  int cutoff;
+  sscanf(argv[1],"%lf",&cf);
   read_data(&h,&data_buffer);
+  cutoff=(int) (cf*h.data_size/11025.0);
   lpf(data_buffer, h.data_size, cutoff);
   write_data(&h,data_buffer);
 
