@@ -34,7 +34,7 @@ void add_sq(float* buffer, float amp, int freq, int start, int end){
   }
 }
 
-void lpf(double* buffer, int size, int cutoff){
+void hpf(double* buffer, int size, int cutoff){
   int i;
   complex double* x_buffer=(complex double*) malloc(sizeof(complex double)*size);
   complex double* X_buffer=(complex double*) malloc(sizeof(complex double)*size);
@@ -44,7 +44,10 @@ void lpf(double* buffer, int size, int cutoff){
  
   fft(x_buffer, X_buffer, size);
   
-  for(i=cutoff; i<size-cutoff; ++i){
+  for(i=1; i<cutoff; ++i){
+    X_buffer[i]=0.0;
+  }
+  for(i=size-cutoff; i<size; ++i){
     X_buffer[i]=0.0;
   }
   ifft(X_buffer, x_buffer, size);
@@ -68,7 +71,7 @@ int main(int argc, char** argv){
   sscanf(argv[1],"%lf",&cf);
   read_data(&h,&data_buffer);
   cutoff=(int) (cf*h.data_size/11025.0);
-  lpf(data_buffer, h.data_size, cutoff);
+  hpf(data_buffer, h.data_size, cutoff);
   write_data(&h,data_buffer);
   
   return 0;
