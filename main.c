@@ -64,7 +64,7 @@ void idft(complex float* x, complex float* X, int N){
   return;
 }
 
-void lpf(double* buffer, int size, double cutoff){
+void lpf(double* buffer, int size, int cutoff){
   int i;
   complex double* x_buffer=(complex double*) malloc(sizeof(complex double)*size);
   complex double* X_buffer=(complex double*) malloc(sizeof(complex double)*size);
@@ -79,7 +79,7 @@ void lpf(double* buffer, int size, double cutoff){
  
   fft(x_buffer, X_buffer, size);
   
-  for(i=(size/2)-15000; i<(size/2)+15000; ++i){
+  for(i=(size/2)-cutoff; i<(size/2)+cutoff; ++i){
     X_buffer[i]=0.0;
   }
   /*for(i=0; i<size; ++i){
@@ -93,71 +93,76 @@ void lpf(double* buffer, int size, double cutoff){
     buffer[i]=creal(x_buffer[i]);
   }
 }
-  
 
 
-int main(){
+struct Header{
+  int head_size;
+  int data_size;
+  char* string;
+};
+
+
+void read_data(struct Header *h, double** data_buffer){
   
   unsigned char buffer[buffer_size];
-  double buffer_fl[buffer_size];
+  char head[buffer_size];
+  //double buffer_fl[buffer_size];
+  double* buffer_fl;
   char* ns;
   int i, df,sqf;
   int data_start_i;
   int data_size;
+  unsigned char uc;
+  
   df=0;
   sqf=0;
   //scanf("%c",buffer);
-  for(i=0; i<buffer_size; ++i){
-    scanf("%c",buffer+i);
-  }
-  //printf(buffer);
-  buffer[buffer_size-1]='\0';
-  ns=strstr(buffer,"data");
-  //printf("%s\n",strstr(buffer,"data"));
-  //printf("%d\n",ns);
-  //printf("%c\n",'w');
-  for(i=0; i<buffer_size; ++i){
-    //printf("%d %d\n",i, buffer[i]);
-    if(df==1){
-      //buffer_fl[i-data_start_i]=((double) (buffer[i]+128))/256;
-      buffer_fl[i-data_start_i]=(double) buffer[i];
-    }
-    if(memcmp(buffer+i,"data",4)==0){
-      //printf("%d\n",i);
-      data_size=((int) buffer[i+4])+256*((int) buffer[i+5])+256*256*((int) buffer[i+6])+256*256*256*((int) buffer[i+7]);
-      df=1;
-      data_start_i=i+8;
-      i=data_start_i;
+  data_size=-1;
+  for(i=0; data_size==-1; ++i){
+    scanf("%c",head+i);
+    if(i>7 && memcmp(head+i-7,"data",4)==0){
+      data_size=((int) head[i-3])+256*((int) head[i-2])+256*256*((int) head[i-1])+256*256*256*((int) head[i]);
+      h->data_size=data_size;
     }
   }
+  h->head_size=i;
+  head[h->head_size]='\0';
+
+  h->string=(char*) malloc(h->head_size*sizeof(char));  
+  for(i=0; i<h->head_size; ++i){
+    h->string[i]=head[i];
+  }
+  *data_buffer=(double*) malloc(data_size*sizeof(double));
+  for(i=h->head_size; i<h->head_size+data_size; ++i){
+    scanf("%c",&uc);
+    (*data_buffer)[i-h->head_size]=(double) uc;
+  }
+  return;
+}
+
+void write_data(struct Header *h, double* data_buffer){
+  int i;
+  for(i=0; i<h->head_size; ++i){
+    //fwrite(h->string+i,1,1,stdout);
+    printf("%c",h->string[i]);
+  }
+  for(i=0; i<h->data_size; ++i){
+    printf("%c",(unsigned char) data_buffer[i]);
+  }
+  return;
+}
+
+int main(){
+  struct Header h;
+  double* data_buffer;
+  //double cf=11025.0-k*11025.0/h.data_size;
+  double cf=1000.0;
+  int cutoff=(int) ((11025-cf)*h.data_size/11025.0);
+  read_data(&h,&data_buffer);
+  lpf(data_buffer, h.data_size, cutoff);
+  write_data(&h,data_buffer);
+
+  fprintf(stderr,"%d",cutoff);
   
-  //add_sq(buffer_fl, 6.0, 5, 0, buffer_size);
-  //add_sq(buffer_fl, 6.0, 3, 0, buffer_size);
-  //add_sq(buffer_fl, 6.0, 4, 0, buffer_size);
-  //lpf(buffer_fl, buffer_size-data_start_i, 0.0);
-  //lpf(buffer_fl, 4*4, 0.0);
-  lpf(buffer_fl, 40000, 0.0);
-  //return 0;
-  df=0;
-  fprintf(stderr,"%d\n",data_size);
-  for(i=0; i<buffer_size; ++i){
-    //fprintf(stderr,"a");
-    //printf("%d %d\n",i, buffer[i]);
-    if(df==1){
-      //fprintf(stderr,"%d %f\n",buffer[i],buffer_fl[i-data_start_i]);
-      //buffer[i]=(char) (buffer_fl[i-data_start_i]*128-128);
-      buffer[i]=(unsigned char) buffer_fl[i-data_start_i];
-      //fprintf(stderr,"%d %f\n",(int) buffer[i], buffer_fl[i-data_start_i]);
-    }
-    if(memcmp(buffer+i,"data",4)==0){
-      fprintf(stderr,"%d\n", ((int) buffer[i+4])+256*((int) buffer[i+5])+256*256*((int) buffer[i+6])+256*256*256*((int) buffer[i+7]));
-      //fprintf(stderr,"%d %d %d %d\n", ((int) buffer[i+4]),((int) buffer[i+5]),((int) buffer[i+6]),((int) buffer[i+7]));
-      //fprintf(stderr,"%d\n",buffer[i+4],buffer[i+5]+16*16*buffer[i+6]+16*16*16*buffer[i+7]);
-      df=1;
-      data_start_i=i+8;
-      i=data_start_i;
-    }
-  }
-  fwrite(buffer,sizeof(char),buffer_size,stdout);
   return 0;
 }
