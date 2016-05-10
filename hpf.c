@@ -8,7 +8,7 @@
 #define buffer_size 1024*200
 
 #ifndef M_PI
-#define M_PI
+#define M_PI 3.14159265358979323846
 #endif
 
 void fft(complex double* x, complex double* X, int N);
