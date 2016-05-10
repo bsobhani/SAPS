@@ -1,0 +1,51 @@
+# Sobhani Audio Processing Suite
+A set of tools for audio manipulation. 
+
+## Commands
+* filter
+* speed
+
+## Commands under development
+* tempo
+* pitch
+* firfilter
+
+## Building
+
+Simply type "make".
+
+To build experimental tempo command (not built by default), type "make tempo".
+
+## Usage examples
+
+### filter
+
+Perform highpass, lowpass, bandpass, or bandstop filtering of a signal.
+
+Examples:
+
+* Lowpass filter - remove frequencies above 1000Hz:
+
+  >./filter -l 1000 < horn.wav > hornFiltered.wav
+  
+* Highpass filter - remove frequencies below 3000Hz:
+
+  >./filter -h 3000 < horn.wav > hornFiltered.wav
+
+* Bandstop filter - remove frequencies between 1000Hz and 3000Hz:
+
+  >./filter -s 1000 3000 < horn.wav > hornFiltered.wav
+
+* Bandpass filter - remove all frequencies except those between 1000Hz and 3000Hz:
+
+  >./filter -p 1000 3000 < horn.wav > hornFiltered.wav
+
+### speed
+
+Speed up or slow down a sound file.
+
+Examples:
+
+* Speed up a file to 1.5 times its original speed:
+
+  >./speed 1.5 < horn.wav > hornFast.wav
