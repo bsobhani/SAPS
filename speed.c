@@ -11,6 +11,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+/*
 void speed_down(double* x, int N1, double* y, int N2);
 
 void speed_down(double* x, int N1, double* y, int N2){
@@ -23,18 +24,15 @@ void speed_down(double* x, int N1, double* y, int N2){
     if(i%w==0){
       ++j;
       y[i+j]=x[i];
-      /*fprintf(stderr, "%d %d %d %d\n",i+j, N1,N2,N1/(N2-N1));*/
     }
   }
 }
+*/
 
 void downsample(double* x, int N1, double* y, int f){
   int i,j;
-  int w;
   j=0;
   for(i=0; i<N1; ++i){
-    //y[i]=x[i];
-    //y[i]=0;
     for(j=0; j<f; ++j){
       y[i*f+j]=x[i];
     }
@@ -42,9 +40,7 @@ void downsample(double* x, int N1, double* y, int f){
 }
 
 void upsample(double* x, int N1, double* y, int f){
-  int i,j;
-  int w;
-  j=0;
+  int i;
   for(i=0; i<N1; ++i){
       y[i]=x[i*f];
   }

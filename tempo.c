@@ -11,33 +11,12 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-void downsample(double* x, int N1, double* y, int f);
-void upsample(double* x, int N1, double* y, int f);
-void fft(complex double* x, complex double* X, int N);
-//void pitch(double* x, int N1, int p, double* y){
-  
+//void tempo(double* x, int N1, int p, double* y,){
 
 void tempo(double* x, int N1, int p, double* y, int N2){
   int i,j;
-  int num,den;
   int p2;
-  double factor;
-  complex double* cv;
-  complex double* xc;
-  complex double* ds;
-  factor=((float) N2)/((float) N1);
-  den=10;
-  num=(int) (factor*den);
-  xc=(complex double*) malloc(sizeof(complex double)*p);
-  ds=(complex double*) malloc(sizeof(complex double)*p*den);
-  for(i=0; i<N1; ++i){
-    xc[i]=x[i];
-  }
   p2=N2/(N1/p);
-  fft(xc,cv,N1);
-  downsample(ds,N1,den);
-  upsample(ds,N1*den,num);
-  
   for(i=0; i<(N1/p); ++i){
     for(j=0; j<p2; ++j){
       y[i*p2+j]=x[i*p+(j%p)];
