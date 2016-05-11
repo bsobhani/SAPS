@@ -11,6 +11,8 @@ struct Header{
   int head_size;
   int data_size;
   char* string;
+  unsigned int sample_rate;
+  unsigned int bps;
 };
 
 void read_data(struct Header *h, double** data_buffer);

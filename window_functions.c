@@ -23,7 +23,7 @@ void hannf(complex double* X, int N){
   fft(w,W,N);
   for(n=0; n<1000; ++n){
     X[n]=X[n]*W[n];
-    fprintf(stderr,"%lf %d\n",creal(w[n]),N);
+    /*fprintf(stderr,"%f %d\n",creal(w[n]),N);*/
   }
   return;
 }

@@ -11,7 +11,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-//void tempo(double* x, int N1, int p, double* y,){
 
 void tempo(double* x, int N1, int p, double* y, int N2){
   int i,j;
@@ -41,7 +40,7 @@ int main(int argc, char** argv){
 
   h.data_size=(h.data_size);
   write_data(&h,y);
-  //free(y);
-  //free(h.string);
+  free(y);
+  free(h.string);
   return 0;
 }
