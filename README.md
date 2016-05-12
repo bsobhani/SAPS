@@ -16,6 +16,14 @@ Simply type "make".
 
 To build experimental tempo command (not built by default), type "make tempo".
 
+## A note on reading and writing to files
+
+The programs in this suite read from stdin and write to stdout. To read from and write to files, you can do something like this:
+
+>./program < inputFile > outputFile
+
+See the examples.
+
 ## Usage examples
 
 ### filter

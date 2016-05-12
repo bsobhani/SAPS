@@ -16,6 +16,7 @@ struct Header{
 };
 
 void read_data(struct Header *h, double** data_buffer);
+void read_data_f(FILE* stream,struct Header *h, double** data_buffer);
 void write_data(struct Header *h, double* data_buffer);
 
 #endif

@@ -11,6 +11,7 @@
 
 void fft(complex double* x, complex double* X, int N);
 
+/* Hanning window */
 void hannf(complex double* X, int N){
   complex double* w;
   complex double* W;

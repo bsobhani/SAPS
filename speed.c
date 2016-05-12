@@ -41,7 +41,7 @@ void downsample(double* x, int N1, double* y, int f){
 
 void upsample(double* x, int N1, double* y, int f){
   int i;
-  for(i=0; i<N1; ++i){
+  for(i=0; i<N1/f; ++i){
       y[i]=x[i*f];
   }
 }
@@ -52,18 +52,20 @@ int main(int argc, char** argv){
   double* y;
   double factor;
   int num, den;
+  if(argc<2){
+    fprintf(stderr,"example usage: %s 1.5 < beep.wav > beepFast.wav\n",argv[0]);
+    return 1;
+  }
   read_data(&h,&data_buffer);
-  fprintf(stderr, "%s\n",argv[1]);
   sscanf(argv[1],"%lf",&factor);
   den=10;
   y=(double*) malloc(den*h.data_size*sizeof(double));
-  /*speed_down(data_buffer,h.data_size, y, Ny);*/
   num=(int) (factor*den);
   downsample(data_buffer,h.data_size,y,den);
   free(data_buffer);
-  upsample(y,(h.data_size*den)/num,y,num);
+  /*upsample(y,(h.data_size*den),y,num);*/
 
-  h.data_size=(h.data_size*den)/num;
+  h.data_size=(h.data_size*den*num);
   write_data(&h,y);
   free(y);
   free(h.string);
