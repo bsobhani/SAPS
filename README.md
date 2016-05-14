@@ -4,6 +4,7 @@ A set of tools for audio manipulation.
 ## Commands
 * filter
 * speed
+* echo
 * info
 
 ## Commands under development
