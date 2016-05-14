@@ -29,7 +29,6 @@ int main(int argc, char** argv){
   fp=fopen(argv[1],"r");
   /* Read data from stdin (see file_io.c) */
   if(read_data_f(fp,&h,&data_buffer)!=0){
-    fprintf(stderr,"Read error: Not a valid WAV file\n");
     return 1;
   }
   printf("Header data for %s:\n",argv[1]);

@@ -118,7 +118,7 @@ int read_data_f(FILE* stream, struct Header *h, double** data_buffer){
       memcpy(h->ChunkID,head+0,4);
       h->ChunkID[4]='\0';
       if(strcmp(h->ChunkID,"RIFF")!=0){
-	/*fprintf(stderr,"Read error: Not a valid WAV file\n");*/
+	fprintf(stderr,"Read error: Not a valid WAV file\n");
 	return 1;
       }
       break;

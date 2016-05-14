@@ -214,7 +214,6 @@ int main(int argc, char** argv){
 
   /* Read data from stdin (see file_io.c) */
   if(read_data(&h,&data_buffer)!=0){
-    fprintf(stderr,"Read error: Not a valid WAV file\n");
     return 1;
   }
   data_size=h.Subchunk2Size*8/h.BitsPerSample;
