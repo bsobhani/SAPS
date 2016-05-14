@@ -65,6 +65,7 @@ Add echos to a sound file. First argument is the echo amplitude (relative to the
 
 Examples:
 * The following will add an echo to the audio every 500ms, with each echo having an amplitude of .8 of the previous echo:
+
   >./echo .8 500 < horn.wav > hornEcho.wav
   
 ### info
