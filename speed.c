@@ -11,24 +11,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-/*
-void speed_down(double* x, int N1, double* y, int N2);
-
-void speed_down(double* x, int N1, double* y, int N2){
-  int i,j;
-  int w;
-  j=0;
-  w=N1/(N2-N1);
-  for(i=0; i<N1; ++i){
-    y[i+j]=x[i];
-    if(i%w==0){
-      ++j;
-      y[i+j]=x[i];
-    }
-  }
-}
-*/
-
 void downsample(double* x, int N1, double* y, int f){
   int i,j;
   j=0;
@@ -52,22 +34,27 @@ int main(int argc, char** argv){
   double* y;
   double factor;
   int num, den;
+  int data_size;
   if(argc<2){
     fprintf(stderr,"example usage: %s 1.5 < beep.wav > beepFast.wav\n",argv[0]);
     return 1;
   }
-  read_data(&h,&data_buffer);
+  /* Read data from stdin (see file_io.c) */
+  if(read_data(&h,&data_buffer)!=0){
+    fprintf(stderr,"Read error: Not a valid WAV file\n");
+    return 1;
+  }
+  data_size=(h.Subchunk2Size*8)/(h.BitsPerSample);
   sscanf(argv[1],"%lf",&factor);
   den=10;
-  y=(double*) malloc(den*h.data_size*sizeof(double));
+  y=(double*) malloc(den*data_size*sizeof(double));
   num=(int) (factor*den);
-  downsample(data_buffer,h.data_size,y,den);
+  downsample(data_buffer,data_size,y,den);
   free(data_buffer);
-  /*upsample(y,(h.data_size*den),y,num);*/
+  upsample(y,(h.Subchunk2Size*8*den/h.BitsPerSample),y,num);
 
-  h.data_size=(h.data_size*den*num);
+  h.Subchunk2Size=(data_size*den*h.BitsPerSample/8)/num;
   write_data(&h,y);
   free(y);
-  free(h.string);
   return 0;
 }

@@ -4,6 +4,7 @@ A set of tools for audio manipulation.
 ## Commands
 * filter
 * speed
+* info
 
 ## Commands under development
 * tempo
@@ -57,3 +58,12 @@ Examples:
 * Speed up a file to 1.5 times its original speed:
 
   >./speed 1.5 < horn.wav > hornFast.wav
+
+### info
+
+Display header data of a WAV file. Note: This program does not take data from stdin; you must specify the filename as a commandline argument.
+
+Examples:
+
+  >./info horn.wav
+
