@@ -28,17 +28,45 @@ void upsample(double* x, int N1, double* y, int f){
   }
 }
 
+void echo(double* x, int Nx, double growth, int spacing, double* y){
+  int i,j;
+  int numEchos=(Nx+spacing)/spacing;
+  double weight;
+  double sumWeights;
+
+  sumWeights=0;
+  weight=1;
+  for(i=0; i<numEchos; ++i){
+    sumWeights+=weight;
+    weight*=growth;
+  }
+  /*fprintf(stderr,"%f",sumWeights);*/
+
+  for(i=0; i<Nx; ++i)
+    y[i]=0;
+
+  for(i=0; i<Nx; ++i){
+    weight=1;
+    for(j=0; j<numEchos; ++j){
+      if(i>=j*spacing){
+	y[i]+=weight*(x[i-j*spacing])/sumWeights;
+	weight=weight*growth;
+      }
+    }
+  }
+
+  return;
+}
+  
+
 int main(int argc, char** argv){
   struct Header h;
   double* data_buffer;
   double* y;
   double factor;
-  int num, den;
   int data_size;
-  int i;
-  double* ir;
-  int ir_size=10240;
-  int spacing=1024;
+  int spacing;
+  double time_spacing;
   int y_size;
   
   if(argc<2){
@@ -51,27 +79,15 @@ int main(int argc, char** argv){
   }
   data_size=(h.Subchunk2Size*8)/(h.BitsPerSample);
   sscanf(argv[1],"%lf",&factor);
-
-  ir=(double*) malloc(ir_size*sizeof(double));
-
-  for(i=0; i<ir_size; ++i){
-    if(i==0){
-      ir[i]=.1;
-    }
-    else if(i%spacing==0){
-      ir[i]=ir[i-spacing]*factor;
-    }
-    else{
-      ir[i]=0;
-    }
-  }
-
-  y_size=data_size+ir_size-1;
-
+  sscanf(argv[2],"%lf",&time_spacing);
+  y_size=data_size;
   y=(double*) malloc(y_size*sizeof(double));
+
+  spacing=(int) (time_spacing*h.SampleRate/1000.0);
+  echo(data_buffer, data_size, factor, spacing, y);
   
-  conv(data_buffer, data_size, ir, ir_size, y);
-  //h.Subchunk2Size=(data_size*den*h.BitsPerSample/8)/num;
+  /*conv(data_buffer, data_size, ir, ir_size, y);*/
+  /*h.Subchunk2Size=(data_size*den*h.BitsPerSample/8)/num;*/
   write_data(&h,y);
   free(y);
   return 0;

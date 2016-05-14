@@ -59,6 +59,14 @@ Examples:
 
   >./speed 1.5 < horn.wav > hornFast.wav
 
+### echo
+
+Add echos to a sound file. First argument is the echo amplitude (relative to the previous echo), and the second argument is the spacing of the echos in milliseconds. 
+
+Examples:
+* The following will add an echo to the audio every 500ms, with each echo having an amplitude of .8 of the previous echo:
+  >./echo .8 500 < horn.wav > hornEcho.wav
+  
 ### info
 
 Display header data of a WAV file. Note: This program does not take data from stdin; you must specify the filename as a commandline argument.

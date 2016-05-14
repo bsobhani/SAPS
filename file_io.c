@@ -170,7 +170,8 @@ int read_data_f(FILE* stream, struct Header *h, double** data_buffer){
   }
 
   if(i<40){
-    return 1;
+    fprintf(stderr,"Read error: Not a valid WAV file\n");
+    return 2;
   }
 
   *data_buffer=(double*) malloc(((h->Subchunk2Size*8)/h->BitsPerSample)*sizeof(double));
