@@ -70,7 +70,7 @@ int main(int argc, char** argv){
   int y_size;
   
   if(argc<2){
-    fprintf(stderr,"example usage: %s 1.5 < beep.wav > beepFast.wav\n",argv[0]);
+    fprintf(stderr,"example usage: %s .8 500 < horn.wav > hornEcho.wav\n",argv[0]);
     return 1;
   }
   /* Read data from stdin (see file_io.c) */
