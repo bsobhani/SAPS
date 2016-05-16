@@ -68,6 +68,16 @@ Examples:
 * The following will add an echo to the audio every 500ms, with each echo having an amplitude of .8 of the previous echo:
 
   >./echo .8 500 < horn.wav > hornEcho.wav
+
+### atten
+
+Attenuate the amplitude of a signal. Specify the time constant in milliseconds.
+
+Examples:
+* The following will multiply the signal by exp(-1000*t/300):
+
+  >./atten 300 < horn.wav > hornAttenuated.wav
+
   
 ### info
 
